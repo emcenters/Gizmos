@@ -48,10 +48,9 @@ public class StartingScreen extends JPanel{
         start.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                start.setVisible(false);
-                instructions.setVisible(false);
-                titleText.setText("Choose Amount of Players");
-                add(totalPlayerList);
+                m.setGameScreen();
+                // titleText.setText("Choose Amount of Players");
+                // add(totalPlayerList);
             }
         });
 
@@ -68,17 +67,15 @@ public class StartingScreen extends JPanel{
         titleText = new JLabel("GIZMOS");
         titleText.setFont(titleFont);
 
-        totalPlayerList = new JComboBox<>(new Integer[] {2, 3, 4});
-        totalPlayerList.setPreferredSize(new Dimension(300, 100));
-        totalPlayerList.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                numPlayers = totalPlayerList.getSelectedIndex()+2;
-                System.out.println(numPlayers);
-                m.nextGameState();
-                m.setGameScreen();
-            }
-        });
+        // totalPlayerList = new JComboBox<>(new Integer[] {2, 3, 4});
+        // totalPlayerList.setPreferredSize(new Dimension(300, 100));
+        // totalPlayerList.addActionListener(new ActionListener() {
+        //     @Override
+        //     public void actionPerformed(ActionEvent e) {
+        //         numPlayers = totalPlayerList.getSelectedIndex()+2;
+        //         m.setGameScreen();
+        //     }
+        // });
     }
     public int getNumPlayers() {
         return numPlayers;

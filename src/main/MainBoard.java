@@ -1,22 +1,26 @@
 package main;
 import boards.*;
+import control.TurnManager;
 
 import javax.swing.*;
 
 import java.awt.*;
 
-public class MainBoard extends JPanel implements Runnable{
+// implements Runnable
+public class MainBoard extends JLayeredPane{
     public final static int STARTSTATE = 0, GAMESTATE = 1, ENDSTATE = 2;
 
     private StartingScreen startScreen;
-    private ActionBoard actionBoard;
-    private GameBoard gameBoard;
+    public ActionBoard actionBoard;
+    public GameBoard gameBoard;
+    private EnergyBoard energyBoard;
 
     public PlayerBoard player;
 
     public MouseHandler mouseHandler;
+    public TurnManager turnManager;
 
-    private Thread gameThread;
+    // private Thread gameThread;
 
     int gameState;
 
@@ -28,7 +32,8 @@ public class MainBoard extends JPanel implements Runnable{
     
     //methods setting the pane + components
     public void setDefaultValues() {
-        mouseHandler = new MouseHandler();
+        mouseHandler = new MouseHandler(this);
+        turnManager = new TurnManager(this);
 
         gameState = 0;
 
@@ -41,10 +46,12 @@ public class MainBoard extends JPanel implements Runnable{
         startScreen.setVisible(false);
 
         //sets action board
-        actionBoard = new ActionBoard();
+        actionBoard = new ActionBoard(this);
 
         //sets game board
         gameBoard = new GameBoard(this, mouseHandler);
+        gameBoard.setDefaultValues();
+        energyBoard = new EnergyBoard(this, mouseHandler);
 
         //sets player board
         player = new PlayerBoard(mouseHandler, null);
@@ -62,30 +69,34 @@ public class MainBoard extends JPanel implements Runnable{
         add(player);
         add(Box.createRigidArea(new Dimension(0, 10)));
         add(gameBoard);
+        add(Box.createRigidArea(new Dimension(0, 10)));
+        add(energyBoard);
+
+        nextGameState();
     }
 
     //runnable
-    public void startGameThread() {
-        gameThread = new Thread(this);
-        gameThread.start();
-    }
-    public void run() {
-		double drawInterval = 1000000000/60;
-		double delta = 0;
-		long lastTime = System.nanoTime();
-		long currentTime;
+    // public void startGameThread() {
+    //     gameThread = new Thread(this);
+    //     gameThread.start();
+    // }
+    // public void run() {
+	// 	double drawInterval = 1000000000/60;
+	// 	double delta = 0;
+	// 	long lastTime = System.nanoTime();
+	// 	long currentTime;
 		
-		while(gameThread != null) {
-			currentTime = System.nanoTime();
-			delta += (currentTime - lastTime) / drawInterval;
-			lastTime = currentTime;
+	// 	while(gameThread != null) {
+	// 		currentTime = System.nanoTime();
+	// 		delta += (currentTime - lastTime) / drawInterval;
+	// 		lastTime = currentTime;
 			
-			if(delta >= 1) {
-				update();
-				delta--;
-			}
-		}
-	}
+	// 		if(delta >= 1) {
+	// 			update();
+	// 			delta--;
+	// 		}
+	// 	}
+	// }
     public void update() {
         switch(gameState) {
             case GAMESTATE: 

@@ -1,52 +1,70 @@
 package object;
 
 import main.*;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import boards.ActionBoard;
+import boards.GameBoard;
+
 public class SuperObject extends JLabel{
     private static ImageIcon image;
+    private int color;
 
-    private MainBoard lp;
+    private MainBoard mb;
     private MouseHandler mh;
     private int distanceX, distanceY;
     private boolean canMove;
 
-    public SuperObject(MainBoard l) {
-        lp = l;
-        mh = lp.mouseHandler;
-        try {
-            image = new ImageIcon(ImageIO.read(SuperObject.class.getResource("/card/pinkSquare.jpg")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } 
-        setIcon(image);
-        setBounds(15, 225, 200, 200);
+    public SuperObject(MainBoard m, int x, int y) {
+        mb = m;
+        mh = m.mouseHandler;
+        
+        setBounds(x, y, Card.CARDSIZE, Card.CARDSIZE);
 
         setDefaultValues();
-    }
-    public SuperObject(int x, int y) {
-        setDefaultValues();
-        setLocation(x, y);
     }
 
     public void setDefaultValues() {
         distanceX = 0;
         distanceY = 0;
 
+        color = 0;
+
         canMove = false;
+    }
+    public int getColor() {
+        return color;
+    }
+    public void setImage(String filePath, int w) {
+        image = new ImageIcon(SuperObject.class.getResource(filePath));
+        //resizing image
+        Image im = image.getImage();
+        Image newimg = im.getScaledInstance(w, w,  java.awt.Image.SCALE_SMOOTH);
+        image = new ImageIcon(newimg);
+        setIcon(image);
+    }
+    public void setColor(int c) {
+        color = c;
     }
 
     public void update() {
-        if(mh.isHeld() && mh.getBounds().intersects(getBounds()) && canMove) {
-            setLocation(mh.getX()-distanceX, mh.getY()-distanceY);
-        }
-        else {
-            canMove = (mh.getPastClick()==mh.getCurrentClick());
-            distanceX = mh.getX()-getX();
-            distanceY = mh.getY()-getY();
+        //for drag if time permits
+        // if(mh.isHeld() && mh.getBounds().intersects(getBounds()) && canMove) {
+        //     setLocation(mh.getX()-distanceX, mh.getY()-distanceY);
+        // }
+        // else {
+        //     canMove = (mh.getPastClick()==mh.getCurrentClick());
+        //     distanceX = mh.getX()-getX();
+        //     distanceY = mh.getY()-getY();
+        // }
+        if(mh.getBounds().intersects(getBounds()) && mh.isMouseClick()) {
+            MouseHandler.currentObject = this;
         }
     }
 }

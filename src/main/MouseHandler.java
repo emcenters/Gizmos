@@ -6,28 +6,30 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.event.MouseInputListener;
 
+import object.SuperObject;
+
 public class MouseHandler implements MouseInputListener{
+    public static SuperObject currentObject = null;
+
+    private MainBoard mb;
+
     private Rectangle mouseBounds;
     private Color mouseColor;
     private int x, y;
 
-    private boolean mouseHeld;
+    private boolean mouseHeld, mouseClick;
     private int pastClick, currentClick;
 
-    public MouseHandler() {
+    public MouseHandler(MainBoard m) {
         mouseBounds = new Rectangle(26, 34);
         mouseColor = Color.green;
         mouseHeld = false;
 
         pastClick = 0;
         currentClick = 0;
-    }
 
-    public void paint(Graphics2D g) {
-        g.setColor(mouseColor);
-        g.draw(mouseBounds);
+        mb = m;
     }
-
 
     public Rectangle getBounds() {
         return mouseBounds;
@@ -49,6 +51,9 @@ public class MouseHandler implements MouseInputListener{
     public boolean isHeld() {
         return mouseHeld;
     }
+    public boolean isMouseClick() {
+        return mouseClick;
+    }
 
 
     @Override
@@ -58,13 +63,16 @@ public class MouseHandler implements MouseInputListener{
     @Override
     public void mousePressed(MouseEvent e) {
         mouseColor = Color.red;
+        mouseClick = true;
         update(e);
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         mouseColor = Color.green;
+        mouseClick = false;
         update(e);
+        mb.update();
     }
 
     @Override
@@ -96,7 +104,5 @@ public class MouseHandler implements MouseInputListener{
         x = e.getX();
         y = e.getY();
         mouseBounds.setLocation(x-10, y-12);
-
-        
     }
 }

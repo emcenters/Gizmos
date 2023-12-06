@@ -1,33 +1,42 @@
 package control;
 import main.*;
+import object.*;
+import boards.*;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-public class TurnManager implements ActionListener{
-    private final static String BUILD = "BUILD";
-    private final static String PICK = "PICK";
-    private final static String FILE = "FILE";
-    private final static String RESEARCH = "RESEARCH";
-
+public class TurnManager {
     private MainBoard mb;
+    private PlayerBoard player;
 
     public TurnManager(MainBoard m) {
         mb = m;
+        player = m.player;
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        String action = e.getActionCommand();
-        switch(action) {
-            case BUILD: 
-                break;
-            case PICK:
-                break;
-            case FILE:
-                break;
-            case RESEARCH:
-                break;
+    public void build() {
+        Card pickedCard = (Card)MouseHandler.currentObject;
+        if(pickedCard.getCost() > player.marbles[pickedCard.getColor()+1]) {
+            mb.actionBoard.reset();
+        } 
+        else {
+            player.build(pickedCard);
         }
+    }
+    public void pick() {
+        Marble pickedMarble = (Marble)MouseHandler.currentObject;
+        if(player.notAtMarbleLimit()) {
+            player.pick(pickedMarble.getColor());
+        }
+        else {
+            mb.actionBoard.reset();
+        }
+    }
+    public void file() {
+        Card filedCard = (Card)MouseHandler.currentObject;
+        if(player.notAtFileLimit()) {
+            player.file(filedCard);
+        }
+    }
+    public void research() {
+        
     }
 }

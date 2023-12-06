@@ -3,20 +3,25 @@ import main.*;
 
 import java.util.*;
 
+import javax.imageio.ImageIO;
+
 public class Card extends SuperObject{
+    public final static int CARDSIZE = 100;
+
     private HashMap<Integer, Integer> triggers, effects, upgrades;
-    private int color, cost;
+    private int cost;
+    private int cardNum;
     private int victoryPoints;
 
-    public Card(MainBoard m, String line) {
-        super(m);
+    public Card(MainBoard m, String line, int x, int y, int num) {
+        super(m, x, y);
 
         triggers = new HashMap<>();
         effects = new HashMap<>();
         upgrades = null;
-        color = 0;
 
         setValues(line);
+        cardNum = num;
     }
 
     public void setValues(String readLine) {
@@ -24,7 +29,7 @@ public class Card extends SuperObject{
         //for normal
         if(line[0].equals("0")) {
             //sets color + cost
-            color = Integer.parseInt(line[3]);
+            setColor(Integer.parseInt(line[3]));
             cost = Integer.parseInt(line[4]);
 
             //sets triggers
@@ -48,7 +53,7 @@ public class Card extends SuperObject{
         else {
             upgrades = new HashMap<>();
             //sets color + cost
-            color = Integer.parseInt(line[2]);
+            setColor(Integer.parseInt(line[2]));
             cost = Integer.parseInt(line[3]);
 
             //sets upgrades
@@ -59,10 +64,21 @@ public class Card extends SuperObject{
             }
 
             //sets victory points
-            victoryPoints = Integer.parseInt(line[index]);
+            if(index != line.length) {
+                victoryPoints = Integer.parseInt(line[index]);
+            }
+            else {
+                victoryPoints = -1;
+            }
         }
     }
     public boolean isUpgrade() {
         return upgrades==null;
+    }
+    public int getCost() {
+        return cost;
+    }
+    public void setImage() {
+        setImage("/card/"+cardNum+".png", CARDSIZE);
     }
 }

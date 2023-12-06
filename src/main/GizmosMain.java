@@ -18,6 +18,6 @@ public class GizmosMain {
 		frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        layeredPane.startGameThread();
+        // layeredPane.startGameThread();
 	}
 }
