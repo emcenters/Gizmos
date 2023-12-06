@@ -1,108 +1,119 @@
-package main;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
+// package main;
+// import java.awt.Color;
+// import java.awt.Graphics2D;
+// import java.awt.Rectangle;
+// import java.awt.event.MouseEvent;
 
-import javax.swing.event.MouseInputListener;
+// import javax.swing.event.MouseInputListener;
 
-import object.SuperObject;
+// import object.Card;
+// import object.Marble;
+// import object.SuperObject;
 
-public class MouseHandler implements MouseInputListener{
-    public static SuperObject currentObject = null;
+// public class MouseHandler implements MouseInputListener{
+//     public static SuperObject currentObject = null;
 
-    private MainBoard mb;
+//     private MainBoard mb;
 
-    private Rectangle mouseBounds;
-    private Color mouseColor;
-    private int x, y;
+//     private Rectangle mouseBounds;
+//     private Color mouseColor;
+//     private int x, y;
 
-    private boolean mouseHeld, mouseClick;
-    private int pastClick, currentClick;
+//     private boolean mouseHeld, mouseClick;
+//     private int pastClick, currentClick;
 
-    public MouseHandler(MainBoard m) {
-        mouseBounds = new Rectangle(26, 34);
-        mouseColor = Color.green;
-        mouseHeld = false;
+//     public MouseHandler(MainBoard m) {
+//         mouseBounds = new Rectangle(26, 34);
+//         mouseColor = Color.green;
+//         mouseHeld = false;
 
-        pastClick = 0;
-        currentClick = 0;
+//         pastClick = 0;
+//         currentClick = 0;
 
-        mb = m;
-    }
+//         mb = m;
+//     }
 
-    public Rectangle getBounds() {
-        return mouseBounds;
-    }
+//     public Rectangle getBounds() {
+//         return mouseBounds;
+//     }
 
-    public int getX() {
-        return x;
-    }
-    public int getY() {
-        return y;
-    }
-    public int getPastClick() {
-        return pastClick;
-    }
-    public int getCurrentClick() {
-        return currentClick;
-    }
+//     public int getX() {
+//         return x;
+//     }
+//     public int getY() {
+//         return y;
+//     }
+//     public int getPastClick() {
+//         return pastClick;
+//     }
+//     public int getCurrentClick() {
+//         return currentClick;
+//     }
 
-    public boolean isHeld() {
-        return mouseHeld;
-    }
-    public boolean isMouseClick() {
-        return mouseClick;
-    }
+//     public boolean isHeld() {
+//         return mouseHeld;
+//     }
+//     public boolean isMouseClick() {
+//         return mouseClick;
+//     }
 
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-    }
+//     @Override
+//     public void mouseClicked(MouseEvent e) {
 
-    @Override
-    public void mousePressed(MouseEvent e) {
-        mouseColor = Color.red;
-        mouseClick = true;
-        update(e);
-    }
+//     }
 
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        mouseColor = Color.green;
-        mouseClick = false;
-        update(e);
-        mb.update();
-    }
+//     @Override
+//     public void mousePressed(MouseEvent e) {
+//         mouseColor = Color.red;
+//         mouseClick = true;
+//         update(e);
+//     }
 
-    @Override
-    public void mouseEntered(MouseEvent e) {
-    }
+//     @Override
+//     public void mouseReleased(MouseEvent e) {
+//         // mouseColor = Color.green;
+//         // mouseClick = false;
+//         // update(e)
+//         if(currentObject.getClass().equals(Card.class)) {
+//             mb.gameBoard.remove(currentObject);
+//             // switch()
+            
+//         }
+//         else if(currentObject.getClass().equals(Marble.class)) {
+//             mb.energyBoard.remove(currentObject);
+//             // mb.turnManager.pick();
+//         }
+//     }
 
-    @Override
-    public void mouseExited(MouseEvent e) {
-    }
+//     @Override
+//     public void mouseEntered(MouseEvent e) {
+//     }
 
-    @Override
-    public void mouseDragged(MouseEvent e) {
-        mouseHeld = true;
-        update(e);
-        pastClick = currentClick;
-        currentClick++;
-    }
+//     @Override
+//     public void mouseExited(MouseEvent e) {
+//     }
 
-    @Override
-    public void mouseMoved(MouseEvent e) {
-        mouseHeld = false;
-        update(e);
+//     @Override
+//     public void mouseDragged(MouseEvent e) {
+//         mouseHeld = true;
+//         update(e);
+//         pastClick = currentClick;
+//         currentClick++;
+//     }
 
-        pastClick = 0;
-        currentClick = 0;
-    }
+//     @Override
+//     public void mouseMoved(MouseEvent e) {
+//         mouseHeld = false;
+//         update(e);
+
+//         pastClick = 0;
+//         currentClick = 0;
+//     }
     
-    public void update(MouseEvent e) {
-        x = e.getX();
-        y = e.getY();
-        mouseBounds.setLocation(x-10, y-12);
-    }
-}
+//     public void update(MouseEvent e) {
+//         x = e.getX();
+//         y = e.getY();
+//         mouseBounds.setLocation(x-10, y-12);
+//     }
+// }

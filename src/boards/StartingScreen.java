@@ -78,6 +78,6 @@ public class StartingScreen extends JPanel{
         // });
     }
     public int getNumPlayers() {
-        return numPlayers;
+        return 4;
     }
 }

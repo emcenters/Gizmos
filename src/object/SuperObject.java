@@ -14,17 +14,12 @@ import boards.GameBoard;
 
 public class SuperObject extends JLabel{
     private static ImageIcon image;
-    private int color;
+    protected int color;
 
-    private MainBoard mb;
-    private MouseHandler mh;
     private int distanceX, distanceY;
     private boolean canMove;
 
-    public SuperObject(MainBoard m, int x, int y) {
-        mb = m;
-        mh = m.mouseHandler;
-        
+    public SuperObject(int x, int y) {       
         setBounds(x, y, Card.CARDSIZE, Card.CARDSIZE);
 
         setDefaultValues();
@@ -63,8 +58,5 @@ public class SuperObject extends JLabel{
         //     distanceX = mh.getX()-getX();
         //     distanceY = mh.getY()-getY();
         // }
-        if(mh.getBounds().intersects(getBounds()) && mh.isMouseClick()) {
-            MouseHandler.currentObject = this;
-        }
     }
 }

@@ -12,9 +12,9 @@ import javax.swing.*;
 import main.MainBoard;
 
 public class ActionBoard extends JLayeredPane{
-    public static boolean buildClicked = false, pickClicked  = false, fileClicked  = false, researchClicked  = false;
-    private JButton[] actionButtons;
-    // 0: build, 1: pick, 2: file, 3: research;
+    public static boolean buildClicked = false, pickClicked  = false, fileClicked  = false;
+    public JButton[] actionButtons;
+    // 0: build, 1: pick, 2: file, 3: research, 4: end turn;
 
     private MainBoard main;
 
@@ -29,10 +29,10 @@ public class ActionBoard extends JLayeredPane{
 
     public void setButtons() {
         actionButtons = new JButton[]
-            {new JButton("BUILD"), new JButton("PICK"), new JButton("FILE"), new JButton("RESEARCH")};
+            {new JButton("BUILD"), new JButton("PICK"), new JButton("FILE"), new JButton("RESEARCH"), new JButton("END TURN")};
 
         Font buttonFont = new Font(Font.SANS_SERIF, Font.PLAIN, 18);
-        int buttonWidth = 250;
+        int buttonWidth = 200;
         int buttonHeight = 60;
 
         for(JButton b: actionButtons) {
@@ -51,22 +51,34 @@ public class ActionBoard extends JLayeredPane{
                             break;
                         case "FILE": fileClicked = true;
                             break;
-                        case "RESEARCH": researchClicked = true;
+                        case "RESEARCH": main.turnManager.researchPopup();;
+                            break;
+                        case "END TURN": main.turnManager.nextPlayer();
+                            reset();
                             break;
                     }
-
                 }
             });
-
             add(b);
         }
 
-        actionButtons[0].setEnabled(false);
+        reset();
     }
 
     public void reset() {
         for(JButton b: actionButtons) {
             b.setEnabled(true);
+        }
+        actionButtons[4].setEnabled(false);
+
+        if(main.player.getTotalMarbles() == 0) {
+            actionButtons[0].setEnabled(false);
+        }
+        if(!main.player.notAtMarbleLimit()) {
+            actionButtons[1].setEnabled(false);
+        }
+        if(!main.player.notAtFileLimit()) {
+            actionButtons[2].setEnabled(false);
         }
     }
 }

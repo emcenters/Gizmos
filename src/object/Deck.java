@@ -16,13 +16,13 @@ public class Deck {
         Scanner fileReader = new Scanner(Deck.class.getResourceAsStream(filePath));
         int cardCount = 1;
         while(fileReader.hasNextLine()) {
-            cards.add(new Card(m, fileReader.nextLine(), 0, 0, cardCount++));
+            cards.add(new Card(fileReader.nextLine(), 0, 0, cardCount++));
         }
         
         shuffle();
 
         for(int i = 0; i < shown.length; i++) {
-            shown[i] = cards.remove(cards.size()-1);
+            shown[i] = cards.remove(0);
             shown[i].setLocation(startX, startY);
             shown[i].setImage();
             startX += Card.CARDSIZE+GameBoard.OFFSET;
@@ -43,6 +43,28 @@ public class Deck {
     public void update() {
         for(Card c: shown) {
             c.update();
+        }
+    }
+    
+    public Card contains(int x, int y) {
+        for(Card c: shown) {
+            if(c.getBounds().contains(x, y)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Card> getCards(int total) {
+        ArrayList<Card> topCards = new ArrayList<>();
+        for(int i = 0; i < total; i++) {
+            topCards.add(cards.remove(0));
+        }
+        return topCards;
+    }
+    public void addToBottom(ArrayList<Card> returnCards) {
+        for(Card c: returnCards) {
+            cards.add(c);
         }
     }
 }

@@ -6,21 +6,20 @@ import javax.swing.*;
 
 import java.awt.*;
 
-// implements Runnable
-public class MainBoard extends JLayeredPane{
+public class MainBoard extends JLayeredPane implements Runnable{
     public final static int STARTSTATE = 0, GAMESTATE = 1, ENDSTATE = 2;
 
     private StartingScreen startScreen;
     public ActionBoard actionBoard;
     public GameBoard gameBoard;
-    private EnergyBoard energyBoard;
+    public EnergyBoard energyBoard;
 
     public PlayerBoard player;
 
-    public MouseHandler mouseHandler;
+    // public MouseHandler mouseHandler;
     public TurnManager turnManager;
 
-    // private Thread gameThread;
+    private Thread gameThread;
 
     int gameState;
 
@@ -32,8 +31,7 @@ public class MainBoard extends JLayeredPane{
     
     //methods setting the pane + components
     public void setDefaultValues() {
-        mouseHandler = new MouseHandler(this);
-        turnManager = new TurnManager(this);
+        // mouseHandler = new MouseHandler(this);
 
         gameState = 0;
 
@@ -45,23 +43,26 @@ public class MainBoard extends JLayeredPane{
         //removes start screen
         startScreen.setVisible(false);
 
-        //sets action board
-        actionBoard = new ActionBoard(this);
-
         //sets game board
-        gameBoard = new GameBoard(this, mouseHandler);
+        gameBoard = new GameBoard(this);
         gameBoard.setDefaultValues();
-        energyBoard = new EnergyBoard(this, mouseHandler);
+        energyBoard = new EnergyBoard(this);
 
         //sets player board
-        player = new PlayerBoard(mouseHandler, null);
+        player = new PlayerBoard(1, new PlayerBoard(2, null));
         PlayerBoard first = player;
-        for(int i = 0; i < startScreen.getNumPlayers(); i++) {
-            player.setNext(new PlayerBoard(mouseHandler, null));
+        player = player.getNext();
+        for(int i = 2; i < startScreen.getNumPlayers(); i++) {
+            player.setNext(new PlayerBoard(i+1, null));
             player = player.getNext();
         }
         player.setNext(first);
         player = player.getNext();
+        
+        //sets action board
+        actionBoard = new ActionBoard(this);
+        turnManager = new TurnManager(this);
+
 
         add(Box.createRigidArea(new Dimension(0, 10)));
         add(actionBoard);
@@ -76,31 +77,32 @@ public class MainBoard extends JLayeredPane{
     }
 
     //runnable
-    // public void startGameThread() {
-    //     gameThread = new Thread(this);
-    //     gameThread.start();
-    // }
-    // public void run() {
-	// 	double drawInterval = 1000000000/60;
-	// 	double delta = 0;
-	// 	long lastTime = System.nanoTime();
-	// 	long currentTime;
+    public void startGameThread() {
+        gameThread = new Thread(this);
+        gameThread.start();
+    }
+    public void run() {
+		double drawInterval = 1000000000/60;
+		double delta = 0;
+		long lastTime = System.nanoTime();
+		long currentTime;
 		
-	// 	while(gameThread != null) {
-	// 		currentTime = System.nanoTime();
-	// 		delta += (currentTime - lastTime) / drawInterval;
-	// 		lastTime = currentTime;
+		while(gameThread != null) {
+			currentTime = System.nanoTime();
+			delta += (currentTime - lastTime) / drawInterval;
+			lastTime = currentTime;
 			
-	// 		if(delta >= 1) {
-	// 			update();
-	// 			delta--;
-	// 		}
-	// 	}
-	// }
+			if(delta >= 1) {
+				update();
+				delta--;
+			}
+		}
+	}
     public void update() {
         switch(gameState) {
             case GAMESTATE: 
                 gameBoard.update();
+                energyBoard.update();
                 player.update();
                 break;
             case ENDSTATE:

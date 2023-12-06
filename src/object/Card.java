@@ -1,5 +1,6 @@
 package object;
 import main.*;
+import boards.*;
 
 import java.util.*;
 
@@ -8,13 +9,16 @@ import javax.imageio.ImageIO;
 public class Card extends SuperObject{
     public final static int CARDSIZE = 100;
 
-    private HashMap<Integer, Integer> triggers, effects, upgrades;
+    public HashMap<Integer, Integer> triggers, effects, upgrades;
     private int cost;
     private int cardNum;
     private int victoryPoints;
 
-    public Card(MainBoard m, String line, int x, int y, int num) {
-        super(m, x, y);
+    // private MouseHandler mh;
+
+    public Card(String line, int x, int y, int num) {
+        super(x, y);
+        // this.mh = mh;
 
         triggers = new HashMap<>();
         effects = new HashMap<>();
@@ -80,5 +84,12 @@ public class Card extends SuperObject{
     }
     public void setImage() {
         setImage("/card/"+cardNum+".png", CARDSIZE);
+    }
+
+    public void update() {
+        // if(mh.getBounds().intersects(getBounds()) && ActionBoard.pickClicked) {
+        //     ActionBoard.pickClicked = false;
+        //     MouseHandler.currentObject = this;
+        // }
     }
 }
