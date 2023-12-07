@@ -49,17 +49,15 @@ public class PlayerBoard extends JLayeredPane implements MouseListener{
 
         player = new Player(this, p.players[num-1]);
         currentPlayer = num-1;
-
-        setBoard();
     }
 
     public void nextPlayer() {
-        currentPlayer++;
+        player.removeAll();
+        currentPlayer += 1;
         if(currentPlayer == players.length) {
             currentPlayer = 0;
             checkForWinner();
         }
-        player.removeAll();
         player = players[currentPlayer];
         player.revealAll();
         ACTION = 0;
@@ -69,7 +67,6 @@ public class PlayerBoard extends JLayeredPane implements MouseListener{
         main.gameBoard.canFile = true;
         main.gameBoard.canResearch = true;
         main.gameBoard.canBuildL1 = true;
-        PlayerBoard.ACTION = 0;
     }
 
     @Override

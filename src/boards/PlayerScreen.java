@@ -24,7 +24,7 @@ public class PlayerScreen {
         for(int i = 0; i < 4; i++) {
             if(i != p.currentPlayer) {
                 PlayerBoard temp = new PlayerBoard(p, i+1);
-                temp.player.revealAll();
+                temp.player.revealAllForPS();
                 temp.player.viewOthers.setVisible(false);
                 temp.player.end.setVisible(false);
                 panel.add(temp);

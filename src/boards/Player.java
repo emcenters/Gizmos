@@ -22,8 +22,9 @@ import object.SuperObject;
 public class Player {
     private PlayerBoard pb;
     private Color dashColor;
+    public int num;
     public JButton end = new JButton("END TURN"), viewOthers = new JButton("VIEW OTHER PLAYERS");
-    private JLabel energyText;
+    private JLabel energyText, VPText;
     
     public int totalCards = 0;
     public int L3Built = 0;
@@ -59,6 +60,7 @@ public class Player {
 
         // next = n;
         this.pb = pb;
+        this.num = num;
         
         if(num == 0) {
             dashColor = new Color(138, 128, 76);
@@ -70,22 +72,22 @@ public class Player {
         setPoints();   
     }
     public Player(PlayerBoard pb, Player p) {
-        this.pb = pb;
+        this.pb = pb.getPlayerBoard();
         this.dashColor = p.dashColor;
-        this.marbles = p.marbles;
+        this.marbles = p.marbles.clone();
         this.end = p.end;
         this.energyText = p.energyText;
 
         this.totalCards = p.totalCards;
         this.L3Built = p.L3Built;
         this.VP = p.VP;
+        this.VPText = p.VPText;
 
-        this.marbles = p.marbles;
-        this.file = p.file;
+        this.file = p.file.clone();
         this.filedCards = p.filedCards;
         this.research = p.research;
-        this.specialUpgrades = p.specialUpgrades;
-        this.cards = p.cards;
+        this.specialUpgrades = p.specialUpgrades.clone();
+        this.cards = (HashMap<Integer, HashMap<Integer, JLabel>>) p.cards.clone();
     }
 
     public void setDefaultValues() {
@@ -125,6 +127,9 @@ public class Player {
 
         energyText = new JLabel("<html>R: "+marbles[2]+"<br/>Y: "+marbles[3]+"<br/>B: "+marbles[4]+"<br/>Bl: "+marbles[5]+"</html>", SwingConstants.CENTER);
         energyText.setBounds(x, y, 150, 150);
+        int tempY = y+100;
+        VPText = new JLabel("Total Victory Points: "+VP, SwingConstants.CENTER);
+        VPText.setBounds(x, tempY, 150, 150);
         x += 200;
         HashMap<Integer, JLabel> energyMap = new HashMap<>();
         energyMap.put(0, energyRing);
@@ -161,6 +166,7 @@ public class Player {
         pb.add(end, 0);
         pb.add(viewOthers, 0);
         pb.add(energyText, 0);
+        pb.add(VPText, 0);
     }
 
     public void revealAll() {
@@ -176,6 +182,20 @@ public class Player {
         }
         end.setVisible(true);
         viewOthers.setVisible(true);
+    }
+    public void revealAllForPS() {
+        updateEnergy();
+        for(Card c: filedCards) {
+            pb.add(c);
+            c.setVisible(true);
+        }
+        for(Integer i: cards.keySet()) {
+            HashMap<Integer, JLabel> cardSet = cards.get(i);
+            for(Integer k: cardSet.keySet()) {
+                pb.add(cardSet.get(k));
+                cardSet.get(k).setVisible(true);
+            }
+        }
     }
     public void removeAll() {
         for(Card c: filedCards) {
@@ -204,11 +224,16 @@ public class Player {
     }
     public void updateEnergy() {
         pb.remove(energyText);
+        pb.remove(VPText);
         int x = energyText.getX(), y = energyText.getY();
         energyText = new JLabel(("<html>R: "+marbles[2]+"<br/>Y: "+marbles[3]+"<br/>B: "
             +marbles[4]+"<br/>Bl: "+marbles[5]+"</html>"), SwingConstants.CENTER);
         energyText.setBounds(x, y, 150, 150);
+        int tempY = VPText.getY();
+        VPText = new JLabel("Total Victory Points: "+VP, SwingConstants.CENTER);
+        VPText.setBounds(x, tempY, 150, 150);
         pb.add(energyText, -1);
+        pb.add(VPText, -1);
     }
 
     public boolean notAtMarbleLimit() {
@@ -300,6 +325,7 @@ public class Player {
         }
         file[1] += 1;
 
+        c.beenUsed = true;
         c.setBounds(x, y, 150, 150);
         c.setImage(150);
         pb.add(c, 0);

@@ -22,7 +22,7 @@ public class MainBoard extends JLayeredPane implements Runnable{
     private Thread gameThread;
 
     int gameState;
-    private Player winner = null;
+    public Player winner = null;
 
     public MainBoard() {
         setBackground(Color.LIGHT_GRAY);
@@ -105,7 +105,7 @@ public class MainBoard extends JLayeredPane implements Runnable{
             energyBoard.setVisible(false);
             gameBoard.setVisible(false);
             playerBoard.setVisible(false);
-            add(new EndScreen());
+            add(new EndScreen(this));
         }
     }
     public void setWinner(Player win) {
