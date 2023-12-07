@@ -10,7 +10,6 @@ public class MainBoard extends JLayeredPane implements Runnable{
     public final static int STARTSTATE = 0, GAMESTATE = 1, ENDSTATE = 2;
 
     private StartingScreen startScreen;
-    public ActionBoard actionBoard;
     public GameBoard gameBoard;
     public EnergyBoard energyBoard;
 
@@ -32,6 +31,7 @@ public class MainBoard extends JLayeredPane implements Runnable{
     
     //methods setting the pane + components
     public void setDefaultValues() {
+        turnManager = new TurnManager(this);
         // mouseHandler = new MouseHandler(this);
 
         gameState = 0;
@@ -50,15 +50,8 @@ public class MainBoard extends JLayeredPane implements Runnable{
         energyBoard = new EnergyBoard(this);
 
         //sets player board
-        playerBoard = new PlayerBoard();
-        
-        //sets action board
-        actionBoard = new ActionBoard(this);
-        turnManager = new TurnManager(this);
+        playerBoard = new PlayerBoard(this);
 
-
-        add(Box.createRigidArea(new Dimension(0, 10)));
-        add(actionBoard);
         add(Box.createRigidArea(new Dimension(0, 10)));
         add(playerBoard);
         add(Box.createRigidArea(new Dimension(0, 10)));

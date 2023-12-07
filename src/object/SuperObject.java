@@ -9,11 +9,10 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import boards.ActionBoard;
 import boards.GameBoard;
 
 public class SuperObject extends JLabel{
-    private static ImageIcon image;
+    protected static ImageIcon image;
     protected int color;
 
     private int distanceX, distanceY;

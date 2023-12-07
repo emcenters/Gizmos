@@ -8,18 +8,30 @@ import boards.GameBoard;
 public class Deck {
     private ArrayList<Card> cards;
     private Card[] shown;
+    public Card deckCard;
     
-    public Deck(MainBoard m, String filePath, int showLength, int startX, int startY) {
+    public Deck(MainBoard m, String filePath, int showLength, int startX, int startY, int cardCount) {
         cards = new ArrayList<>();
         shown = new Card[showLength];
 
         Scanner fileReader = new Scanner(Deck.class.getResourceAsStream(filePath));
-        int cardCount = 1;
         while(fileReader.hasNextLine()) {
             cards.add(new Card(fileReader.nextLine(), 0, 0, cardCount++));
         }
         
         shuffle();
+
+        int tier = 0;
+
+        switch(showLength) {
+            case 4: tier = 1; break;
+            case 3: tier = 2; break;
+            case 2: tier = 3; break;
+        }
+        deckCard = new Card(null, startX, startY, 0);
+        deckCard.setImage("/card/deck"+tier+".png", Card.CARDSIZE);
+        startX += Card.CARDSIZE+GameBoard.OFFSET;
+        m.gameBoard.add(deckCard);
 
         for(int i = 0; i < shown.length; i++) {
             shown[i] = cards.remove(0);

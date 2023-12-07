@@ -26,6 +26,7 @@ public class EnergyBoard extends JLayeredPane implements MouseListener{
         rand = new Random((int)Math.random());
         // mouseHandler = new MouseHandler(m);
         addMarbles();
+        addMouseListener(this);
     }
 
     public void addMarbles() {
@@ -45,17 +46,16 @@ public class EnergyBoard extends JLayeredPane implements MouseListener{
         for(Marble m: marbleRow) {
             m.update();
         }
-        if(ActionBoard.pickClicked) {
+        // if(ActionBoard.pickClicked) {
         //     ActionBoard.pickClicked = false;
-            if(main.playerBoard.player.notAtMarbleLimit() && addedListener == 0) {
-                addMouseListener(this);
-                addedListener++;
-                // addMouseMotionListener(mouseHandler);
-            } 
-            else if(!main.playerBoard.player.notAtMarbleLimit()){
-                main.actionBoard.reset();
-            }
-        }
+            // if(main.playerBoard.player.notAtMarbleLimit() && addedListener == 0) {
+            //     addedListener++;
+            //     // addMouseMotionListener(mouseHandler);
+            // } 
+            // else if(!main.playerBoard.player.notAtMarbleLimit()){
+                // main.actionBoard.reset();
+            // }
+        // }
         // else if(getMouseListeners().length != 0){
         //     // removeMouseListener(mouseHandler);
         //     // removeMouseMotionListener(mouseHandler);
@@ -81,13 +81,11 @@ public class EnergyBoard extends JLayeredPane implements MouseListener{
 
         for(int i = 0; i < marbleRow.length; i++) {
             if(bounds.intersects(marbleRow[i].getBounds())) {
-                // ActionBoard.pickClicked = false;
-                addedListener = 0;
-                if(main.turnManager.pick(marbleRow[i]) != null) {
-                    Marble replace = main.turnManager.pick(marbleRow[i]);
+                Marble replace = main.turnManager.pick(marbleRow[i]);
+                if(replace != null) {
                     remove(marbleRow[i]);
+                    marbleRow[i] = replace;
                     add(replace);
-                    removeMouseListener(this);
                 }
                 break;
             }

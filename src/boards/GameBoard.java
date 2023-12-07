@@ -25,21 +25,21 @@ public class GameBoard extends JLayeredPane implements MouseListener{
 
         main = m;
         mouseClicked = 0;
+        addMouseListener(this);
         // mouseHandler = new MouseHandler(m);
     }
 
     public void setDefaultValues() {
-        L1 = new Deck(main, "/card/L1.txt", 4, LX, L1Y);
-        L2 = new Deck(main, "/card/L1.txt", 3, LX, L2Y);
-        L3 = new Deck(main, "/card/L1.txt", 2, LX, L3Y);
+        L1 = new Deck(main, "/card/L1.txt", 4, LX, L1Y, 1);
+        L2 = new Deck(main, "/card/L2.txt", 3, LX, L2Y, 37);
+        L3 = new Deck(main, "/card/L3.txt", 2, LX, L3Y, 73);
     }
 
     public void update() {
         // testCard.update();
-        if(ActionBoard.buildClicked || ActionBoard.fileClicked) {
-            addMouseListener(this);
-            mouseClicked++;
-        }
+        // if(ActionBoard.buildClicked || ActionBoard.fileClicked) {
+            
+        // }
         
         L1.update();
         L2.update();
@@ -53,6 +53,17 @@ public class GameBoard extends JLayeredPane implements MouseListener{
             case 3: return L3;
         }
         return null;
+    }
+    public Card drawFromDeck(int cardNum) {
+        if(cardNum > 72) {
+            return L3.getCards(1).get(0);
+        }
+        else if(cardNum > 36) {
+            return L2.getCards(1).get(0);
+        }
+        else {
+            return L1.getCards(1).get(0);
+        }
     }
 
     @Override
@@ -71,7 +82,10 @@ public class GameBoard extends JLayeredPane implements MouseListener{
         int x = e.getX();
         int y = e.getY();
 
-        if(L1.contains(x, y) != null) {
+        if(L1.deckCard.getBounds().contains(x, y) || L2.deckCard.getBounds().contains(x, y) || L3.deckCard.getBounds().contains(x, y)) {
+            main.turnManager.researchPopup();
+        }   
+        else if(L1.contains(x, y) != null) {
             Card card = L1.contains(x, y);
             performAction(card);
         }
@@ -95,13 +109,15 @@ public class GameBoard extends JLayeredPane implements MouseListener{
         // TODO Auto-generated method stub
     }
     public void performAction(Card c) {
-        if(ActionBoard.buildClicked) {
-            ActionBoard.buildClicked = false;
-            main.turnManager.build(c);
+        String[] choices = new String[]{"ARCHIVE", "BUILD"};
+        int result = JOptionPane.showOptionDialog(null, "BUILD OR ARCHIVE?", "", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, choices, null);
+        System.out.println(result);
+
+        if(result == 0) {
+            main.turnManager.file(c, false);
         }
-        else if(ActionBoard.fileClicked) {
-            ActionBoard.fileClicked = false;
-            main.turnManager.file(c);
+        else if(result == 1) {
+            main.turnManager.build(c);
         }
     }
 }

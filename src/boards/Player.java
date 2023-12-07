@@ -2,12 +2,14 @@ package boards;
 
 import java.awt.Color;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
@@ -17,10 +19,12 @@ import object.SuperObject;
 public class Player {
     private PlayerBoard pb;
     private Color dashColor;
+    public JButton end = new JButton("END TURN");
+    private JLabel energyText;
 
     //marbles + file limit
     public int[] marbles, file; //marbles - 0: limit, 1: current amount, 2: #red, 3: #yellow, 4: #blue, 5: #black
-    private ArrayList<Card> filedCards;
+    public ArrayList<Card> filedCards;
     //research limit
     public int research;
     private int[] specialUpgrades;
@@ -91,10 +95,24 @@ public class Player {
 
         JLabel energyRing = new JLabel(setImage("/objects/energyring.png", 150));
         energyRing.setBounds(x, y, 150, 150);
-        HashMap<Integer, JLabel> temp = new HashMap<>();
-        temp.put(0, energyRing);
 
-        cards.put(6, temp);
+        energyText = new JLabel("<html>R: "+marbles[2]+"<br/>Y: "+marbles[3]+"<br/>B: "+marbles[4]+"<br/>Bl: "+marbles[5]+"</html>", SwingConstants.CENTER);
+        energyText.setBounds(x, y, 150, 150);
+        x += 200;
+        HashMap<Integer, JLabel> energyMap = new HashMap<>();
+        energyMap.put(0, energyRing);
+        cards.put(6, energyMap);
+
+        end.setBounds(x, y, 100, 40);
+        end.setEnabled(false);
+        end.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                pb.main.turnManager.addAllListeneres();
+                pb.main.turnManager.nextPlayer();
+                end.setEnabled(false);
+            }
+        });
     }
 
     public void addComponents() {
@@ -104,9 +122,12 @@ public class Player {
                 pb.add(cardSet.get(k));
             }
         }
+        pb.add(end);
+        pb.add(energyText);
     }
 
     public void revealAll() {
+        updateEnergy();
         for(Card c: filedCards) {
             c.setVisible(true);
         }
@@ -116,6 +137,7 @@ public class Player {
                 cardSet.get(k).setVisible(true);
             }
         }
+        end.setVisible(true);
     }
     public void removeAll() {
         for(Card c: filedCards) {
@@ -127,6 +149,8 @@ public class Player {
                 cardSet.get(k).setVisible(false);
             }
         }
+        end.setVisible(false);
+        energyText.setVisible(false);
     }
 
     public void update() {
@@ -138,6 +162,14 @@ public class Player {
     }
     public void setNext(Player n) {
         next = n;
+    }
+    public void updateEnergy() {
+        pb.remove(energyText);
+        int x = energyText.getX(), y = energyText.getY();
+        energyText = new JLabel(("<html>R: "+marbles[2]+"<br/>Y: "+marbles[3]+"<br/>B: "
+            +marbles[4]+"<br/>Bl: "+marbles[5]+"</html>"), SwingConstants.CENTER);
+        energyText.setBounds(x, y, 150, 150);
+        pb.add(energyText);
     }
 
     public boolean notAtMarbleLimit() {
@@ -194,7 +226,8 @@ public class Player {
         }
     }
     public void pick(int color) {
-        marbles[color] += 1;
+        marbles[color+1] += 1;
+        System.out.println(color+" "+marbles[color+1]);
         marbles[1] += 1;
     }
     public void file(Card c) {

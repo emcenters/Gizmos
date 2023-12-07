@@ -25,7 +25,9 @@ public class Card extends SuperObject{
         effects = new HashMap<>();
         upgrades = null;
 
-        setValues(line);
+        if(line != null) {
+            setValues(line);
+        }
         cardNum = num;
     }
 
@@ -88,6 +90,9 @@ public class Card extends SuperObject{
     }
     public void setImage(int w) {
         setImage("/card/"+cardNum+".png", w);
+    }
+    public void removeImage() {
+        image = null;
     }
 
     public void update() {
