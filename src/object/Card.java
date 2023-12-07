@@ -5,6 +5,7 @@ import boards.*;
 import java.util.*;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 public class Card extends SuperObject{
     public final static int CARDSIZE = 100;
@@ -82,8 +83,11 @@ public class Card extends SuperObject{
     public int getCost() {
         return cost;
     }
-    public void setImage() {
-        setImage("/card/"+cardNum+".png", CARDSIZE);
+    public int getCardNum() {
+        return cardNum;
+    }
+    public void setImage(int w) {
+        setImage("/card/"+cardNum+".png", w);
     }
 
     public void update() {

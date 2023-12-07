@@ -20,7 +20,7 @@ public class GameBoard extends JLayeredPane implements MouseListener{
     public final static int OFFSET = 25;
 
     public GameBoard(MainBoard m) {
-        setPreferredSize(new Dimension(1400, 300));
+        setPreferredSize(new Dimension(1400, 500));
         setBorder(BorderFactory.createTitledBorder("GAME BOARD"));
 
         main = m;
@@ -96,9 +96,11 @@ public class GameBoard extends JLayeredPane implements MouseListener{
     }
     public void performAction(Card c) {
         if(ActionBoard.buildClicked) {
+            ActionBoard.buildClicked = false;
             main.turnManager.build(c);
         }
         else if(ActionBoard.fileClicked) {
+            ActionBoard.fileClicked = false;
             main.turnManager.file(c);
         }
     }

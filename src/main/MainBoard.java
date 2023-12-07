@@ -14,7 +14,7 @@ public class MainBoard extends JLayeredPane implements Runnable{
     public GameBoard gameBoard;
     public EnergyBoard energyBoard;
 
-    public PlayerBoard player;
+    public PlayerBoard playerBoard;
 
     // public MouseHandler mouseHandler;
     public TurnManager turnManager;
@@ -26,6 +26,7 @@ public class MainBoard extends JLayeredPane implements Runnable{
     public MainBoard() {
         setBackground(Color.LIGHT_GRAY);
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        setPreferredSize(new Dimension(1400, 1000));
         setDefaultValues();
     }
     
@@ -49,15 +50,7 @@ public class MainBoard extends JLayeredPane implements Runnable{
         energyBoard = new EnergyBoard(this);
 
         //sets player board
-        player = new PlayerBoard(1, new PlayerBoard(2, null));
-        PlayerBoard first = player;
-        player = player.getNext();
-        for(int i = 2; i < startScreen.getNumPlayers(); i++) {
-            player.setNext(new PlayerBoard(i+1, null));
-            player = player.getNext();
-        }
-        player.setNext(first);
-        player = player.getNext();
+        playerBoard = new PlayerBoard();
         
         //sets action board
         actionBoard = new ActionBoard(this);
@@ -67,7 +60,7 @@ public class MainBoard extends JLayeredPane implements Runnable{
         add(Box.createRigidArea(new Dimension(0, 10)));
         add(actionBoard);
         add(Box.createRigidArea(new Dimension(0, 10)));
-        add(player);
+        add(playerBoard);
         add(Box.createRigidArea(new Dimension(0, 10)));
         add(gameBoard);
         add(Box.createRigidArea(new Dimension(0, 10)));
@@ -103,7 +96,7 @@ public class MainBoard extends JLayeredPane implements Runnable{
             case GAMESTATE: 
                 gameBoard.update();
                 energyBoard.update();
-                player.update();
+                // player.update();
                 break;
             case ENDSTATE:
                 break;

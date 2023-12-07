@@ -24,7 +24,7 @@ public class Deck {
         for(int i = 0; i < shown.length; i++) {
             shown[i] = cards.remove(0);
             shown[i].setLocation(startX, startY);
-            shown[i].setImage();
+            shown[i].setImage(Card.CARDSIZE);
             startX += Card.CARDSIZE+GameBoard.OFFSET;
             m.gameBoard.add(shown[i]);
         }

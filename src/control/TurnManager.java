@@ -41,9 +41,9 @@ public class TurnManager {
                 }
                 confirm.setVisible(false);
                 
-                ArrayList<Card> researchCards = mb.gameBoard.getDeck(researchDeckNum).getCards(mb.player.research);
+                ArrayList<Card> researchCards = mb.gameBoard.getDeck(researchDeckNum).getCards(mb.playerBoard.player.research);
                 for(Card c: researchCards) {
-                    c.setImage();
+                    c.setImage(Card.CARDSIZE);
                     JButton temp = new JButton();
                     temp.add(c);
                     temp.addActionListener(new ActionListener() {
@@ -80,17 +80,17 @@ public class TurnManager {
     }
 
     public void build(Card pickedCard) {
-        if(pickedCard.getCost() > mb.player.marbles[pickedCard.getColor()+1]) {
+        if(pickedCard.getCost() > mb.playerBoard.player.marbles[pickedCard.getColor()+1]) {
             mb.actionBoard.reset();
         } 
         else {
-            mb.player.build(pickedCard);
+            mb.playerBoard.player.build(pickedCard);
             mb.actionBoard.actionButtons[4].setEnabled(true);
         }
     }
     public Marble pick(Marble marble) {
-        if(mb.player.notAtMarbleLimit()) {
-            mb.player.pick(marble.getColor());
+        if(mb.playerBoard.player.notAtMarbleLimit()) {
+            mb.playerBoard.player.pick(marble.getColor());
             Marble replaceMarble = new Marble(((int)(Math.random()*4)+1), marble.getX(), marble.getY());
             replaceMarble.setImage();
             mb.actionBoard.actionButtons[4].setEnabled(true);
@@ -102,9 +102,22 @@ public class TurnManager {
         }
     }
     public void file(Card filedCard) {
-        if(mb.player.notAtFileLimit()) {
-            mb.player.file(filedCard);
+        if(mb.playerBoard.player.notAtFileLimit()) {
+            mb.playerBoard.player.file(filedCard);
             mb.gameBoard.remove(filedCard);
+            Deck drawDeck;
+            if(filedCard.getCardNum() > 72) {
+                drawDeck = mb.gameBoard.getDeck(3);
+            }
+            else if(filedCard.getCardNum() > 36) {
+                drawDeck = mb.gameBoard.getDeck(2);
+            }
+            else {
+                drawDeck = mb.gameBoard.getDeck(1);
+            }
+
+            
+            // mb.gameBoard.add()
             mb.actionBoard.actionButtons[4].setEnabled(true);
         }
         else {
@@ -116,9 +129,7 @@ public class TurnManager {
         
     }
     public void nextPlayer() {
-        mb.remove(mb.player);
-        mb.player = mb.player.getNext();
-        mb.add(mb.player);
+        mb.playerBoard.nextPlayer();
     }
 
     public ImageIcon getIcon(String filePath, int w) {

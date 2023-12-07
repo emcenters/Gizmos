@@ -29,7 +29,7 @@ public class ActionBoard extends JLayeredPane{
 
     public void setButtons() {
         actionButtons = new JButton[]
-            {new JButton("BUILD"), new JButton("PICK"), new JButton("FILE"), new JButton("RESEARCH"), new JButton("END TURN")};
+            {new JButton("BUILD"), new JButton("PICK"), new JButton("FILE"), new JButton("RESEARCH"), new JButton("END")};
 
         Font buttonFont = new Font(Font.SANS_SERIF, Font.PLAIN, 18);
         int buttonWidth = 200;
@@ -53,7 +53,7 @@ public class ActionBoard extends JLayeredPane{
                             break;
                         case "RESEARCH": main.turnManager.researchPopup();;
                             break;
-                        case "END TURN": main.turnManager.nextPlayer();
+                        case "END": main.turnManager.nextPlayer();
                             reset();
                             break;
                     }
@@ -71,13 +71,13 @@ public class ActionBoard extends JLayeredPane{
         }
         actionButtons[4].setEnabled(false);
 
-        if(main.player.getTotalMarbles() == 0) {
+        if(main.playerBoard.player.getTotalMarbles() == 0) {
             actionButtons[0].setEnabled(false);
         }
-        if(!main.player.notAtMarbleLimit()) {
+        if(!main.playerBoard.player.notAtMarbleLimit()) {
             actionButtons[1].setEnabled(false);
         }
-        if(!main.player.notAtFileLimit()) {
+        if(!main.playerBoard.player.notAtFileLimit()) {
             actionButtons[2].setEnabled(false);
         }
     }

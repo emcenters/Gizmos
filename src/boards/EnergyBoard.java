@@ -47,12 +47,12 @@ public class EnergyBoard extends JLayeredPane implements MouseListener{
         }
         if(ActionBoard.pickClicked) {
         //     ActionBoard.pickClicked = false;
-            if(main.player.notAtMarbleLimit() && addedListener == 0) {
+            if(main.playerBoard.player.notAtMarbleLimit() && addedListener == 0) {
                 addMouseListener(this);
                 addedListener++;
                 // addMouseMotionListener(mouseHandler);
             } 
-            else if(!main.player.notAtMarbleLimit()){
+            else if(!main.playerBoard.player.notAtMarbleLimit()){
                 main.actionBoard.reset();
             }
         }
@@ -81,7 +81,7 @@ public class EnergyBoard extends JLayeredPane implements MouseListener{
 
         for(int i = 0; i < marbleRow.length; i++) {
             if(bounds.intersects(marbleRow[i].getBounds())) {
-                ActionBoard.pickClicked = false;
+                // ActionBoard.pickClicked = false;
                 addedListener = 0;
                 if(main.turnManager.pick(marbleRow[i]) != null) {
                     Marble replace = main.turnManager.pick(marbleRow[i]);
