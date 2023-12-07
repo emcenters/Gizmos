@@ -12,6 +12,11 @@ public class Card extends SuperObject{
 
     public HashMap<Integer, Integer> triggers, effects, upgrades;
     private int cost;
+    private int level;
+    private int type;
+    //0: upgrade, 1: converter, 2: file, 3: pick, 4: build
+    public boolean beenUsed;
+    
     private int cardNum;
     private int victoryPoints;
 
@@ -24,11 +29,13 @@ public class Card extends SuperObject{
         triggers = new HashMap<>();
         effects = new HashMap<>();
         upgrades = null;
+        level = 0;
+        cardNum = num;
+        beenUsed = false;
 
         if(line != null) {
             setValues(line);
         }
-        cardNum = num;
     }
 
     public void setValues(String readLine) {
@@ -78,15 +85,36 @@ public class Card extends SuperObject{
                 victoryPoints = -1;
             }
         }
+        
+        if(cardNum > 72) {
+        	level = 3;
+        }
+        else if(cardNum > 36) {
+        	level = 2;
+        }
+        else {
+        	level = 1;
+        }
+        
+        setType();
     }
     public boolean isUpgrade() {
-        return upgrades==null;
+        return upgrades != null;
     }
     public int getCost() {
         return cost;
     }
+    public void setCost(int c) {
+        cost = c;
+    }
     public int getCardNum() {
         return cardNum;
+    }
+    public int getLevel() {
+    	return level;
+    }
+    public int getType() {
+    	return type;
     }
     public void setImage(int w) {
         setImage("/card/"+cardNum+".png", w);
@@ -100,5 +128,26 @@ public class Card extends SuperObject{
         //     ActionBoard.pickClicked = false;
         //     MouseHandler.currentObject = this;
         // }
+    }
+    
+    public void setType() {
+    	if(isUpgrade()) {
+    		type = 0;
+    	}
+        else {
+            int trig = triggers.get(1);
+            if(trig > 11) {
+                type = 1;
+            }
+            else if(trig > 7) {
+                type = 3;
+            }
+            else if(trig > 1) {
+                type = 4;
+            }
+            else {
+                type = 2;
+            }
+        }
     }
 }

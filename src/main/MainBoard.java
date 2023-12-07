@@ -5,6 +5,7 @@ import control.TurnManager;
 import javax.swing.*;
 
 import java.awt.*;
+import java.util.EnumSet;
 
 public class MainBoard extends JLayeredPane implements Runnable{
     public final static int STARTSTATE = 0, GAMESTATE = 1, ENDSTATE = 2;
@@ -21,6 +22,7 @@ public class MainBoard extends JLayeredPane implements Runnable{
     private Thread gameThread;
 
     int gameState;
+    private Player winner = null;
 
     public MainBoard() {
         setBackground(Color.LIGHT_GRAY);
@@ -92,11 +94,21 @@ public class MainBoard extends JLayeredPane implements Runnable{
                 // player.update();
                 break;
             case ENDSTATE:
+                removeAll();
                 break;
         }
     }
 
     public void nextGameState() {
         gameState += 1;
+        if(gameState == ENDSTATE) {
+            energyBoard.setVisible(false);
+            gameBoard.setVisible(false);
+            playerBoard.setVisible(false);
+            add(new EndScreen());
+        }
+    }
+    public void setWinner(Player win) {
+        winner = win;
     }
 }

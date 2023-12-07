@@ -20,7 +20,7 @@ public class StartingScreen extends JPanel{
     public StartingScreen(MainBoard main) {
         setBackground(Color.LIGHT_GRAY);
         setLayout(new FlowLayout(FlowLayout.CENTER, 2000, 40));
-        setPreferredSize(new Dimension(1400, 900));
+        setPreferredSize(new Dimension(1400, 800));
         m = main;
         numPlayers = 0;
 

@@ -58,4 +58,13 @@ public class SuperObject extends JLabel{
         //     distanceY = mh.getY()-getY();
         // }
     }
+
+    public boolean contains(int x, int y) {
+        if(x <= getX()+getWidth() && x >= getX()) {
+            if(y <= getY()+getHeight() && y >= getY()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

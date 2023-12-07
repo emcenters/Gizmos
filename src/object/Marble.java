@@ -28,4 +28,14 @@ public class Marble extends SuperObject {
         //     System.out.println("PICK");
         // }
     // }
+
+    public String toString() {
+        switch(color) {
+            case 1: return "RED";
+            case 2: return "YELLOW";
+            case 3: return "BLUE";
+            case 4: return "BLACK";
+        }
+        return "";
+    }
 }

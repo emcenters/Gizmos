@@ -7,7 +7,7 @@ import boards.GameBoard;
 
 public class Deck {
     private ArrayList<Card> cards;
-    private Card[] shown;
+    public Card[] shown;
     public Card deckCard;
     
     public Deck(MainBoard m, String filePath, int showLength, int startX, int startY, int cardCount) {
@@ -66,6 +66,22 @@ public class Deck {
         }
         return null;
     }
+    public int getIndex(int x, int y) {
+        for(int i = 0; i < shown.length; i++) {
+            if(shown[i].getBounds().contains(x, y)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    public int getIndex(Card c) {
+        for(int i = 0; i < shown.length; i++) {
+            if(shown[i] == c) {
+                return i;
+            }
+        }
+        return -1;
+    }
 
     public ArrayList<Card> getCards(int total) {
         ArrayList<Card> topCards = new ArrayList<>();
@@ -77,6 +93,12 @@ public class Deck {
     public void addToBottom(ArrayList<Card> returnCards) {
         for(Card c: returnCards) {
             cards.add(c);
+        }
+    }
+
+    public void cutDeck() {
+        for(int i = 0; i < 20; i++) {
+            cards.remove(0);
         }
     }
 }

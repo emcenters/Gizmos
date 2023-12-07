@@ -10,7 +10,8 @@ import java.util.*;
 
 public class PlayerBoard extends JLayeredPane implements MouseListener{
     public MainBoard main;
-    private static int ACTION = 0;
+    public static int ACTION = 0;
+    public static int BUILDL2 = 0;
 
     public Player[] players;
     public int currentPlayer = 0;
@@ -39,16 +40,36 @@ public class PlayerBoard extends JLayeredPane implements MouseListener{
         }
         player = players[currentPlayer];
         player.revealAll();
+
+        addMouseListener(this);
+    }
+    public PlayerBoard(PlayerBoard p, int num) {
+        setPreferredSize(new Dimension(1200, 300));
+        setBorder(BorderFactory.createTitledBorder("PLAYER "+(num)));
+
+        player = new Player(this, p.players[num-1]);
+        currentPlayer = num-1;
+
+        setBoard();
     }
 
     public void nextPlayer() {
         currentPlayer++;
         if(currentPlayer == players.length) {
             currentPlayer = 0;
+            checkForWinner();
         }
         player.removeAll();
         player = players[currentPlayer];
         player.revealAll();
+        ACTION = 0;
+        BUILDL2 = 0;
+
+        main.gameBoard.canBuild = true;
+        main.gameBoard.canFile = true;
+        main.gameBoard.canResearch = true;
+        main.gameBoard.canBuildL1 = true;
+        PlayerBoard.ACTION = 0;
     }
 
     @Override
@@ -65,21 +86,36 @@ public class PlayerBoard extends JLayeredPane implements MouseListener{
     public void mouseReleased(MouseEvent e) {
         int x = e.getX();
         int y = e.getY();
+        System.out.println(x+" "+y);
 
         if(player.filedCards.size() > 0) {
             Card fileToBuild = null;
             for(Card c: player.filedCards) {
                 if(c.contains(x, y)) {
                     fileToBuild = c;
+                    String[] choices = new String[]{"BUILD"};
+                    int result = JOptionPane.showOptionDialog(null, "BUILD OR ARCHIVE?", "", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
+                
+                    if(result == 0) {
+                        main.turnManager.build(fileToBuild);
+                    }
                     break;
                 }
             }
-
-            String[] choices = new String[]{"BUILD"};
-            int result = JOptionPane.showOptionDialog(null, "BUILD OR ARCHIVE?", "", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
-        
-            if(result == 0) {
-                main.turnManager.build(fileToBuild);
+        }
+        Card card = null;
+        for(int i = 0; i < 5; i++) {
+            HashMap<Integer, JLabel> cardSet = player.cards.get(i);
+            for(Integer k: cardSet.keySet()) {
+                if(cardSet.get(k).contains(x, y)) {
+                    System.out.println("trig eff");
+                	card = (Card) cardSet.get(k);
+                    if(!card.beenUsed && (card.triggers.containsValue(PlayerBoard.ACTION) || card.triggers.containsValue(PlayerBoard.BUILDL2))) {
+                        card.beenUsed = true;
+                        main.turnManager.startEffect(card.effects);
+                    }
+                	break;
+                }
             }
         }
     }
@@ -97,5 +133,17 @@ public class PlayerBoard extends JLayeredPane implements MouseListener{
     public void setBoard() {
         player.addComponents();
         player.removeAll();
+    }
+
+    public void checkForWinner() {
+        for(int i = 0; i < players.length; i++) {
+            if(players[i].L3Built >= 4 || players[i].totalCards >= 16) {
+                main.nextGameState();
+                main.setWinner(players[i]);
+            }
+        }
+    }
+    public PlayerBoard getPlayerBoard() {
+        return this;
     }
 }

@@ -11,7 +11,7 @@ import java.util.Random;
 public class EnergyBoard extends JLayeredPane implements MouseListener{
     private MainBoard main;
     // private MouseHandler mouseHandler;
-    private int addedListener = 0;
+    public int grabCap = 1;
     
     private Marble[] marbleRow;
     private Random rand;
@@ -80,9 +80,10 @@ public class EnergyBoard extends JLayeredPane implements MouseListener{
         Rectangle bounds = new Rectangle(x, y, 20, 34);
 
         for(int i = 0; i < marbleRow.length; i++) {
-            if(bounds.intersects(marbleRow[i].getBounds())) {
+            if(bounds.intersects(marbleRow[i].getBounds()) && grabCap > 0) {
                 Marble replace = main.turnManager.pick(marbleRow[i]);
                 if(replace != null) {
+                    grabCap--;
                     remove(marbleRow[i]);
                     marbleRow[i] = replace;
                     add(replace);
