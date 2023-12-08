@@ -140,7 +140,8 @@ public class Player {
         end.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                pb.main.turnManager.addAllListeneres();
+                pb.main.turnManager.addAllListeners();
+                pb.main.energyBoard.grabCap = 1;
                 pb.main.turnManager.nextPlayer();
                 end.setEnabled(false);
             }
@@ -257,13 +258,17 @@ public class Player {
         	}
         }
 
-        if(filedCards.contains(c)) {
+        if(filedCards.indexOf(c) != -1) {
         	PlayerBoard.ACTION = 6;
-            filedCards.remove(c);
-            pb.remove(c);
-            build(c);
+            file[1] -= 1;
+            int loc = filedCards.indexOf(c);
+            c.setVisible(false);
+            pb.remove(filedCards.remove(loc));
+            HashMap<Integer, JLabel> map = cards.get(5);
+            map.remove(c);
+            cards.put(5, map);
         }
-        else if(c.isUpgrade()) {
+        if(c.isUpgrade()) {
             for(Integer i: c.upgrades.keySet()) {
                 int upgNum = c.upgrades.get(i);
                 switch(upgNum) {
@@ -292,18 +297,17 @@ public class Player {
                 }
             }
         }
-        else {
-            int loc = c.getType();
+        int loc = c.getType();
             
-            JLabel label = cards.get(loc).get(cards.get(loc).size()-1);
-            c.setImage(150);
-            JLabel temp = c;
-            temp.setBounds(label.getX(), label.getY()+OFFSET, 150, 150);
-            HashMap<Integer, JLabel> map = cards.get(loc);
-            map.put(map.size(), temp);
-            cards.put(loc, map);
-            pb.add(temp, 0);
-        }
+        JLabel label = cards.get(loc).get(cards.get(loc).size()-1);
+        c.setImage(150);
+        JLabel newCard = new JLabel();
+        newCard.add(c);
+        newCard.setBounds(label.getX(), label.getY()+OFFSET, 150, 150);
+        HashMap<Integer, JLabel> map = cards.get(loc);
+        map.put(map.size(), newCard);
+        cards.put(loc, map);
+        pb.add(newCard, 0);
     }
     public void pick(int color) {
     	PlayerBoard.ACTION = 7+color;
@@ -326,10 +330,11 @@ public class Player {
         file[1] += 1;
 
         c.beenUsed = true;
-        c.setBounds(x, y, 150, 150);
-        c.setImage(150);
-        pb.add(c, 0);
         filedCards.add(c);
+        int loc = filedCards.indexOf(c);
+        filedCards.get(loc).setBounds(x, y, 150, 150);
+        filedCards.get(loc).setImage(150);
+        pb.add(filedCards.get(loc));
     }
 
     public ImageIcon setImage(String filePath, int w) {

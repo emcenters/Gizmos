@@ -85,16 +85,14 @@ public class PlayerBoard extends JLayeredPane implements MouseListener{
         int y = e.getY();
         System.out.println(x+" "+y);
 
-        if(player.filedCards.size() > 0) {
-            Card fileToBuild = null;
+        if(player.filedCards.size() > 0 && main.gameBoard.canBuild) {
             for(Card c: player.filedCards) {
                 if(c.contains(x, y)) {
-                    fileToBuild = c;
                     String[] choices = new String[]{"BUILD"};
-                    int result = JOptionPane.showOptionDialog(null, "BUILD OR ARCHIVE?", "", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
+                    int result = JOptionPane.showOptionDialog(null, "BUILD?", "", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
                 
                     if(result == 0) {
-                        main.turnManager.build(fileToBuild);
+                        main.turnManager.build(c);
                     }
                     break;
                 }

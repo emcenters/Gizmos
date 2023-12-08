@@ -22,7 +22,7 @@ public class TurnManager {
         mb = m;
 
         researchDeckNum = -1;
-        rand = new Random(40);
+        rand = new Random();
     }
     public void researchPopup() {
 
@@ -96,9 +96,16 @@ public class TurnManager {
     }
 
     public boolean build(Card pickedCard) {
-        if(pickedCard.getCost() <= mb.playerBoard.player.marbles[pickedCard.getColor()+1]) {            
+        if(pickedCard.getCost() <= mb.playerBoard.player.marbles[pickedCard.getColor()+1]) {
+            if(mb.gameBoard.getComponentZOrder(pickedCard) != -1) {
+                Card newDisplayCard = mb.gameBoard.drawFromDeck(pickedCard.getCardNum());
+                newDisplayCard.setBounds(pickedCard.getX(), pickedCard.getY(), pickedCard.getWidth(), pickedCard.getHeight());
+                newDisplayCard.setImage(Card.CARDSIZE);
+                mb.gameBoard.remove(pickedCard);
+                mb.gameBoard.add(newDisplayCard, 0);
+            }          
             mb.playerBoard.player.build(pickedCard);
-            mb.gameBoard.remove(pickedCard);
+            // mb.gameBoard.remove(pickedCard);
             mb.playerBoard.player.updateEnergy();
             removeAllListeners();
             return true;
@@ -114,6 +121,9 @@ public class TurnManager {
             replaceMarble.setImage();
             mb.playerBoard.player.updateEnergy();
             removeAllListeners();
+            mb.gameBoard.canBuild = false;
+            mb.gameBoard.canBuildL1 = false;
+            mb.gameBoard.canResearch = false;
 
             return replaceMarble;
         }
@@ -162,7 +172,7 @@ public class TurnManager {
         mb.gameBoard.removeMouseListener(mb.gameBoard);
         mb.playerBoard.player.end.setEnabled(true);
     }
-    public void addAllListeneres() {
+    public void addAllListeners() {
         mb.energyBoard.addMouseListener(mb.energyBoard);
         mb.gameBoard.addMouseListener(mb.gameBoard);
     }

@@ -34,7 +34,7 @@ public class GameBoard extends JLayeredPane implements MouseListener{
         L1 = new Deck(main, "/card/L1.txt", 4, LX, L1Y, 1);
         L2 = new Deck(main, "/card/L2.txt", 3, LX, L2Y, 37);
         L3 = new Deck(main, "/card/L3.txt", 2, LX, L3Y, 73);
-        L3.cutDeck();;
+        L3.cutDeck();
     }
 
     public void update() {
