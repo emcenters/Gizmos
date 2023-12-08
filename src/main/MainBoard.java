@@ -62,6 +62,10 @@ public class MainBoard extends JLayeredPane implements Runnable{
         add(energyBoard);
 
         nextGameState();
+        JOptionPane.showMessageDialog(null, "<html>To Pick: click on any marble at the bottom of the screen at the beginnning of your turn."
+                    +"<br/>To File or Build: click on any shown card on the game board at the beginning of your turn."
+                    +"<br/>To Research: click on the tier card for each deck at the beginning of your turn."
+                    +"<br/>To Activate a Card's Effects: after one of the basic actions, click on the card that you want to activate.", "INSTRUCTIONS", JOptionPane.INFORMATION_MESSAGE);
     }
 
     //runnable

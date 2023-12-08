@@ -86,7 +86,9 @@ public class Deck {
     public ArrayList<Card> getCards(int total) {
         ArrayList<Card> topCards = new ArrayList<>();
         for(int i = 0; i < total; i++) {
-            topCards.add(cards.remove(0));
+            if(cards.size() > 0) {
+                topCards.add(cards.remove(0));
+            }
         }
         return topCards;
     }

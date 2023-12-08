@@ -103,7 +103,6 @@ public class PlayerBoard extends JLayeredPane implements MouseListener{
             HashMap<Integer, JLabel> cardSet = player.cards.get(i);
             for(Integer k: cardSet.keySet()) {
                 if(cardSet.get(k).contains(x, y)) {
-                    System.out.println("trig eff");
                 	card = (Card) cardSet.get(k);
                     if(!card.beenUsed && (card.triggers.containsValue(PlayerBoard.ACTION) || card.triggers.containsValue(PlayerBoard.BUILDL2))) {
                         card.beenUsed = true;
